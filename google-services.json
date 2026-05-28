@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "721783654406",
+    "project_id": "e-coomerce-ec6e7",
+    "storage_bucket": "e-coomerce-ec6e7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721783654406:android:e92c22f82666a417cd9b87",
+        "android_client_info": {
+          "package_name": "com.shubham.ecommerce"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjbRQhcWPdCEqdv5gR6z97PjtYYc0NrZM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

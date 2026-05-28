@@ -12,22 +12,37 @@ interface IProduct {
 
 export function ProductProvider({ children }: any) {
   const [products, setProducts] = useState<IProduct[]>([]);
-  const [loading,setLoading]=useState(false);
-  const [page,setPage]=useState(1);
-  const [data,setData]=useState<IProduct[]>([]);
-
+  const [loading, setLoading] = useState(false);
+  const [skip,setSkip]=useState(0)
+  const [hasMore, sethasMore] = useState(true);
+  const LIMIT=6;
 
 
   const fetchProducts = async () => {
+    if(loading || !hasMore) return true;
+
     try {
-      const response = await fetch("https://fakestoreapi.com/products");
+
+    setLoading(true);
+      const response = await fetch(`https://dummyjson.com/products?limit=${LIMIT}&skip=${skip}`);
 
       const data = await response.json();
-      setProducts(data);
 
-      setData(data.slice(0,6))
+      setProducts((prev)=>[
+        ...prev,
+        ...data.products
+      ]);
+
+    setSkip((prev)=>prev+LIMIT);
+
+    if(skip+LIMIT >= data.total){
+      sethasMore(false)
+    }
     } catch (err) {
       console.log(err);
+    }
+    finally{
+      setLoading(false)
     }
   };
 
@@ -36,10 +51,7 @@ export function ProductProvider({ children }: any) {
   }, []);
 
   return (
-    <ProductContext.Provider value={products}>
-      {children}
-    </ProductContext.Provider>
+    <ProductContext.Provider value={{products,fetchProducts,loading,hasMore}}>{children}</ProductContext.Provider>
   );
 }
-
 export default ProductContext;

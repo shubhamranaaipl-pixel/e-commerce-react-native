@@ -8,9 +8,15 @@ import {
   StyleSheet,
 } from "react-native";
 import { useCart } from "@/src/context/CartContext";
+import { sendOrderNotification } from "@/src/service/notification";
 
 export default function Cart() {
   const { cart, deletedCart, deleteAllData } = useCart();
+  console.log("The cart Data is",cart)
+  const placeOrder=async()=>{
+     deleteAllData();
+     await sendOrderNotification();
+  }
 
   return (
     <View style={styles.container}>
@@ -22,7 +28,7 @@ export default function Cart() {
         contentContainerStyle={{ paddingBottom: 120 }}
         renderItem={({ item }) => (
           <Pressable style={styles.card}>
-            <Image source={{ uri: item.image }} style={styles.image} />
+            <Image source={{ uri: item?.images[0]|| item.images}} style={styles.image} />
 
             <View style={styles.info}>
               <Text numberOfLines={2} style={styles.title}>
@@ -47,7 +53,7 @@ export default function Cart() {
 
       {cart.length !== 0 && (
         <TouchableOpacity
-          onPress={deleteAllData}
+          onPress={placeOrder}
           style={styles.orderBtn}
         >
           <Text style={styles.orderText}>Place Order</Text>

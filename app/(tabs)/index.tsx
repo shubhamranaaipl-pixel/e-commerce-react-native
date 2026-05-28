@@ -4,7 +4,7 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  Pressable
+  Pressable,
 } from "react-native";
 import Header from "@/src/component/Header/header";
 import { router } from "expo-router";
@@ -12,8 +12,7 @@ import { router } from "expo-router";
 import { useProduct } from "@/src/hook/useProduct";
 
 export default function Index() {
-  const { ProductsData,addToCart } = useProduct();
-
+  const { products, addToCart, loading, fetchProducts,hasMore } = useProduct();
 
   return (
     <View
@@ -23,9 +22,9 @@ export default function Index() {
         padding: 10,
       }}
     >
-      <Header/>
+      <Header />
       <FlatList
-        data={ProductsData}
+        data={products}
         numColumns={2}
         keyExtractor={(item) => item.id.toString()}
         columnWrapperStyle={{
@@ -33,7 +32,7 @@ export default function Index() {
         }}
         renderItem={({ item }) => (
           <Pressable
-          onPress={()=>router.push(`/product/${item.id}`)}
+            onPress={() => router.push(`/product/${item.id}`)}
             style={{
               backgroundColor: "#f5f5f5",
               width: "48%",
@@ -43,7 +42,7 @@ export default function Index() {
             }}
           >
             <Image
-              source={{ uri: item.image }}
+              source={{ uri: item.images[0] }}
               style={{
                 width: "100%",
                 height: 150,
@@ -81,7 +80,7 @@ export default function Index() {
             </Text>
 
             <TouchableOpacity
-            onPress={()=>addToCart(item.id)}
+              onPress={() => addToCart(item.id)}
               style={{
                 backgroundColor: "black",
                 marginTop: 10,
@@ -90,12 +89,21 @@ export default function Index() {
                 alignItems: "center",
               }}
             >
-              <Text style={{ color: "#fff" }}>
-                Add To Cart
-              </Text>
+              <Text style={{ color: "#fff" }}>Add To Cart</Text>
             </TouchableOpacity>
           </Pressable>
         )}
+        onEndReached={() =>{
+          if(!loading && hasMore){
+            fetchProducts()
+          }
+        }}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          loading ? (
+            <Text style={{ textAlign: "center" }}>Loading...</Text>
+          ) : null
+        }
       />
     </View>
   );

@@ -57,6 +57,7 @@ export default function CartProvider({ children }: any) {
   }
   useEffect(() => {
     loadCart();
+    // deleteAllData();
   
 
   }, []);
